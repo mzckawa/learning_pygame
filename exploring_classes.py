@@ -44,6 +44,8 @@ while True:
     # screen.fill(light_green)
     pygame.display.flip()
 
+    # drawing the collectible
+
     collec_1 = Collectible(width//2, length//2)
     collec_1.draw_collec()
 
@@ -51,6 +53,31 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             exit()
+
+    # controlling the player
+
+    if pygame.key.get_pressed()[K_w]:
+
+        player_y -= 10
+
+    if pygame.key.get_pressed()[K_s]:
+
+        player_y += 10
+
+    if pygame.key.get_pressed()[K_d]:
+
+        player_x += 10
+
+    if pygame.key.get_pressed()[K_a]:
+
+        player_x -= 10
+
+    # drawing the player
+    pygame.draw.rect(screen, pink, (player_x, player_y))
+
+
+
+    
 
         
 
