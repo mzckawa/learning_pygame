@@ -7,9 +7,10 @@ from sys import exit
 from random import randint
 
 # defining my screen's measures
-length = 860
-width = 640 
-screen = pygame.display.set_mode((length, width))
+width = 860
+height = 640 
+screen = pygame.display.set_mode((width, height))
+
 
 # creating the player
 player_x = 0
@@ -22,10 +23,11 @@ class Collectible:
     def __init__(self, x_pos, y_pos):
         self.x_pos = x_pos
         self.y_pos = y_pos
+        self.collected = False
 
     def draw_collec(self):
 
-        pygame.draw.circle(screen, lilac, (self.x_pos, self.y_pos), 100)
+        pygame.draw.rect(screen, lilac, (self.x_pos, self.y_pos, 50, 50))
 
     # def movement(self):
     #     x_pos += 1
@@ -39,15 +41,18 @@ light_green = (128, 200, 128)
 pink = (255, 0, 255)
 lilac = (200, 162, 200)
 
+# creating the first collectible 
+collec_1 = Collectible(width//2, height//2)
+
+# creating a clock
+
+clock = pygame.time.Clock()
+
 while True:
 
-    # screen.fill(light_green)
-    pygame.display.flip()
+    clock.tick(30)
 
-    # drawing the collectible
-
-    collec_1 = Collectible(width//2, length//2)
-    collec_1.draw_collec()
+    screen.fill(light_green) 
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -73,8 +78,19 @@ while True:
         player_x -= 10
 
     # drawing the player
-    pygame.draw.rect(screen, pink, (player_x, player_y))
+    player = pygame.draw.rect(screen, pink, (player_x, player_y, 50, 50))
 
+    # drawing the collectible
+    if not collec_1.collected:
+        collec_1.draw_collec()
+
+    # creating the collision conditional
+    if player.colliderect(collec_1):
+        collec_1.collected = True
+
+
+    pygame.display.flip()
+    
 
 
     
