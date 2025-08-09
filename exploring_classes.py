@@ -23,16 +23,17 @@ class Collectible:
     def __init__(self, x_pos, y_pos):
         self.x_pos = x_pos
         self.y_pos = y_pos
+        self.rect = pygame.Rect(self.x_pos, self.y_pos, 100, 100)
         self.collected = False
 
     def draw_collec(self):
+        pygame.draw.rect(screen, lilac, self.rect)
 
-        pygame.draw.rect(screen, lilac, (self.x_pos, self.y_pos, 50, 50))
-
-    # def movement(self):
-    #     x_pos += 1
-    #     if x_pos >= length:
-    #         x_pos = 0
+    def movement(self):
+        self.x_pos -= 10
+        if self.x_pos <= 0:
+            self.x_pos = width
+        self.rect = pygame.Rect(self.x_pos, self.y_pos, 100, 100)
 
 # naming some RGB tuples 
 black = (0, 0, 0)
@@ -42,6 +43,8 @@ pink = (255, 0, 255)
 lilac = (200, 162, 200)
 
 # creating the first collectible 
+
+x_collect = randint()
 collec_1 = Collectible(width//2, height//2)
 
 # creating a clock
@@ -61,28 +64,29 @@ while True:
 
     # controlling the player
 
-    if pygame.key.get_pressed()[K_w]:
+    if pygame.key.get_pressed()[K_w] or pygame.key.get_pressed()[K_UP]:
 
         player_y -= 10
 
-    if pygame.key.get_pressed()[K_s]:
+    if pygame.key.get_pressed()[K_s] or pygame.key.get_pressed()[K_DOWN]:
 
         player_y += 10
 
-    if pygame.key.get_pressed()[K_d]:
+    if pygame.key.get_pressed()[K_d] or pygame.key.get_pressed()[K_RIGHT]:
 
         player_x += 10
 
-    if pygame.key.get_pressed()[K_a]:
+    if pygame.key.get_pressed()[K_a] or pygame.key.get_pressed()[K_LEFT]:
 
         player_x -= 10
 
     # drawing the player
-    player = pygame.draw.rect(screen, pink, (player_x, player_y, 50, 50))
+    player = pygame.draw.rect(screen, pink, (player_x, player_y, 100, 100))
 
     # drawing the collectible
     if not collec_1.collected:
         collec_1.draw_collec()
+        collec_1.movement()
 
     # creating the collision conditional
     if player.colliderect(collec_1):
