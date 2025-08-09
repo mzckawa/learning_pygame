@@ -11,10 +11,9 @@ width = 860
 height = 640 
 screen = pygame.display.set_mode((width, height))
 
-
 # creating the player
-player_x = 0
-player_y = 0
+player_x = 20
+player_y = 2 * height//3
 
 # creating the collectible's class
 
@@ -23,17 +22,24 @@ class Collectible:
     def __init__(self, x_pos, y_pos):
         self.x_pos = x_pos
         self.y_pos = y_pos
-        self.rect = pygame.Rect(self.x_pos, self.y_pos, 100, 100)
+        self.width = 50
+        self.height = 50
+        self.rect = pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
         self.collected = False
+        self.lost = False
 
     def draw_collec(self):
         pygame.draw.rect(screen, lilac, self.rect)
 
     def movement(self):
+
         self.x_pos -= 10
-        if self.x_pos <= 0:
-            self.x_pos = width
-        self.rect = pygame.Rect(self.x_pos, self.y_pos, 100, 100)
+
+        if self.x_pos < -2 * self.width: # in order to make the collectible disappear from the screen, but stop being drawn
+            self.lost = True
+
+        else:
+            self.rect = pygame.Rect(self.x_pos, self.y_pos, 50, 50) # if we do this command under the condition of the o
 
 # naming some RGB tuples 
 black = (0, 0, 0)
@@ -42,10 +48,22 @@ light_green = (128, 200, 128)
 pink = (255, 0, 255)
 lilac = (200, 162, 200)
 
-# creating the first collectible 
+# defining a random number of appearances for the collectibles 
+amount_collect = randint(1, 10)
 
-x_collect = randint()
-collec_1 = Collectible(width//2, height//2)
+# creating a dictionary to store the collectibles with their positions
+collects_1_dic = {}
+dic_collec_1_collected = {} # to store the collectibles that were collected
+dic_collec_1_lost = {} # to store the collectibles that exceed the screen size without being caught by the player
+
+for i in range(amount_collect):
+
+    # generating random positions for the collectibles 
+    x_collect = randint(player_x * 2, width) - 100
+    y_collect = randint(height//2, height) - 100
+
+    # creating the objects of the class Collectible with the generated random positions
+    collects_1_dic[i] = Collectible(x_collect, y_collect)
 
 # creating a clock
 
@@ -83,31 +101,22 @@ while True:
     # drawing the player
     player = pygame.draw.rect(screen, pink, (player_x, player_y, 100, 100))
 
-    # drawing the collectible
-    if not collec_1.collected:
-        collec_1.draw_collec()
-        collec_1.movement()
+    # drawing the collectibles
 
-    # creating the collision conditional
-    if player.colliderect(collec_1):
-        collec_1.collected = True
+    for i in range(amount_collect):
 
+        # creating the collision conditional
+        if player.colliderect(collects_1_dic[i]):
+            if player.colliderect(collects_1_dic[i]):
+                collects_1_dic[i].collected = True
+
+        # keeping on drawing the collectible, if it was not caught by the player 
+        if not collects_1_dic[i].collected:
+            collects_1_dic[i].draw_collec()
+            collects_1_dic[i].movement()
+
+            # if the x position of the collectible is lesser than 0, it means the player didn't catch it, so it's lost
+            if collects_1_dic[i].lost:
+                dic_collec_1_lost[i] = collects_1_dic[i]
 
     pygame.display.flip()
-    
-
-
-    
-
-        
-
-
-
-
-
-
-        
-
-
-
-
