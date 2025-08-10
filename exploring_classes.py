@@ -59,29 +59,34 @@ y_pos_collects_1 = []
 while len(all_collects_1) < amount_collect:
 
     x_collect = width # we want the collectibles to always go from the right side to the left side
-    y_collect = randint(height // 2, height) - 30 # generating a random y-axis position for the collectible
+    
+    while True:
 
-    adequate = True 
+        y_collect = randint(height // 2, height) - 30 # generating a random y-axis position for the collectible
 
-    if y_pos_collects_1:
+        adequate = True 
 
-        for y in y_pos_collects_1:
+        if y_pos_collects_1:
 
-            if abs(y_collect - y) < 50:
+            for y in y_pos_collects_1:
 
-                adequate = False
-                break
+                if abs(y_collect - y) < 50:
 
-    if adequate:
+                    adequate = False
+                    break
 
-        # adding the random-yet-adequate y-axis position to the list of positions
-        y_pos_collects_1.append(y_collect)
+        if adequate:
+            break
 
-        # creating the objects of the class Collectible with the generated random positions
-        collectible = Collectible(x_collect, y_collect)
+    
+    # adding the random-yet-adequate y-axis position to the list of positions
+    y_pos_collects_1.append(y_collect)
 
-        # adding the newly-created collectible to the list with the other collectibles of the same kind
-        all_collects_1.append(collectible)
+    # creating the objects of the class Collectible with the generated random positions
+    collectible = Collectible(x_collect, y_collect)
+
+    # adding the newly-created collectible to the list with the other collectibles of the same kind
+    all_collects_1.append(collectible)
 
 # creating a clock
 
@@ -119,10 +124,6 @@ while True:
     # drawing the player
     player = pygame.draw.rect(screen, pink, (player_x, player_y, 100, 100))
 
-    # adding the collectibles to the list with all the collectibles of the same type
-
-
-
     # drawing the collectibles based on which of them were already collected or lost
 
     remaining_collect_1 = []
@@ -131,8 +132,7 @@ while True:
 
         # creating the collision conditional
         if player.colliderect(collectible):
-            if player.colliderect(collectible):
-                collectible.collected = True
+            collectible.collected = True
 
         # keeping on drawing the collectible, if it was not caught by the player
         if not collectible.collected:
@@ -156,28 +156,31 @@ while True:
         while len(all_collects_1) < amount_collect:
 
             x_collect = width # we want the collectibles to always go from the right side to the left side
-            y_collect = randint(height // 2, height) - 30 # generating a random y-axis position for the collectible
+            
+            while True:
+                y_collect = randint(height // 2, height) - 30 # generating a random y-axis position for the collectible
 
-            adequate = True 
+                adequate = True 
 
-            if y_pos_collects_1:
+                if y_pos_collects_1:
 
-                for y in y_pos_collects_1:
+                    for y in y_pos_collects_1:
 
-                    if abs(y_collect - y) < 50:
+                        if abs(y_collect - y) < 50:
 
-                        adequate = False
-                        break
+                            adequate = False
+                            break
 
-            if adequate:
+                if adequate:
+                    break
 
-                # adding the random-yet-adequate y-axis position to the list of positions
-                y_pos_collects_1.append(y_collect)
+            # adding the random-yet-adequate y-axis position to the list of positions
+            y_pos_collects_1.append(y_collect)
 
-                # creating the objects of the class Collectible with the generated random positions
-                collectible = Collectible(x_collect, y_collect)
+            # creating the objects of the class Collectible with the generated random positions
+            collectible = Collectible(x_collect, y_collect)
 
-                # adding the newly-created collectible to the list with the other collectibles of the same kind
-                all_collects_1.append(collectible)
+            # adding the newly-created collectible to the list with the other collectibles of the same kind
+            all_collects_1.append(collectible)
 
     pygame.display.flip()
