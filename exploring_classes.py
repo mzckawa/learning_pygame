@@ -42,21 +42,6 @@ class Collectible:
         else:
             self.rect = pygame.Rect(self.x_pos, self.y_pos, 50, 50) # if we do this command under the condition of the o
 
-def Closeness(list):
-
-    global height
-    y = randint(height//2, height) - 30
-
-    if list:
-
-        for i in range(len(list)):
-
-            if abs(y_pos_collects_1[i] - y_pos_collects_1[-1]) < 20:
-                y = randint(height//2, height) - 30
-                return Closeness
-
-    return y
-
 # naming some RGB tuples
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -71,19 +56,32 @@ amount_collect = randint(1, 10)
 all_collects_1 = []
 y_pos_collects_1 = []
 
-for i in range(amount_collect):
+while len(all_collects_1) < amount_collect:
 
     x_collect = width # we want the collectibles to always go from the right side to the left side
-    y_collect = Closeness(y_pos_collects_1)  # generating a random y-axis position for the collectibles that is not too close from the previous ones
+    y_collect = randint(height // 2, height) - 30 # generating a random y-axis position for the collectible
 
-    # adding the random-yet-adequate y-axis position to the list of positions
-    y_pos_collects_1.append(y_collect)
+    adequate = True 
 
-    # creating the objects of the class Collectible with the generated random positions
-    collectible = Collectible(x_collect, y_collect)
+    if y_pos_collects_1:
 
-    # adding the newly-created collectible to the list with the other collectibles of the same kind
-    all_collects_1.append(collectible)
+        for y in y_pos_collects_1:
+
+            if abs(y_collect - y) < 50:
+
+                adequate = False
+                break
+
+    if adequate:
+
+        # adding the random-yet-adequate y-axis position to the list of positions
+        y_pos_collects_1.append(y_collect)
+
+        # creating the objects of the class Collectible with the generated random positions
+        collectible = Collectible(x_collect, y_collect)
+
+        # adding the newly-created collectible to the list with the other collectibles of the same kind
+        all_collects_1.append(collectible)
 
 # creating a clock
 
@@ -150,21 +148,36 @@ while True:
 
     if not all_collects_1: # let's go all over again!
 
+        y_pos_collects_1.clear()
+
         # defining a random number of appearances for the collectibles
         amount_collect = randint(1, 10)
 
-        for i in range(amount_collect):
+        while len(all_collects_1) < amount_collect:
 
             x_collect = width # we want the collectibles to always go from the right side to the left side
-            y_collect = Closeness(y_pos_collects_1)  # generating a random y-axis position for the collectibles that is not too close from the previous ones
+            y_collect = randint(height // 2, height) - 30 # generating a random y-axis position for the collectible
 
-            # adding the random-yet-adequate y-axis position to the list of positions
-            y_pos_collects_1.append(y_collect)
+            adequate = True 
 
-            # creating the objects of the class Collectible with the generated random positions
-            collectible = Collectible(x_collect, y_collect)
+            if y_pos_collects_1:
 
-            # adding the newly-created collectible to the list with the other collectibles of the same kind
-            all_collects_1.append(collectible)
+                for y in y_pos_collects_1:
+
+                    if abs(y_collect - y) < 50:
+
+                        adequate = False
+                        break
+
+            if adequate:
+
+                # adding the random-yet-adequate y-axis position to the list of positions
+                y_pos_collects_1.append(y_collect)
+
+                # creating the objects of the class Collectible with the generated random positions
+                collectible = Collectible(x_collect, y_collect)
+
+                # adding the newly-created collectible to the list with the other collectibles of the same kind
+                all_collects_1.append(collectible)
 
     pygame.display.flip()
