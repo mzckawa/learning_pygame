@@ -49,44 +49,51 @@ light_green = (128, 200, 128)
 pink = (255, 0, 255)
 lilac = (200, 162, 200)
 
-# defining a random number of appearances for the collectibles
-amount_collect = randint(1, 10)
-
-# creating a list list to store the collectibles more easily
-all_collects_1 = []
-y_pos_collects_1 = []
-
-while len(all_collects_1) < amount_collect:
-
-    x_collect = width # we want the collectibles to always go from the right side to the left side
+def creating_collectibles(): # it doesn't need to return anything, because we are going to work with the lists
     
-    while True:
+    list_all = []
+    list_y = []
 
-        y_collect = randint(height // 2, height) - 30 # generating a random y-axis position for the collectible
+    # defining a random number of appearances for the collectibles
+    amount_collect = randint(1, 10)
 
-        adequate = True 
+    while len(list_all) < amount_collect:
 
-        if y_pos_collects_1:
-
-            for y in y_pos_collects_1:
-
-                if abs(y_collect - y) < 50:
-
-                    adequate = False
-                    break
-
-        if adequate:
-            break
-
+        x_collect = width # we want the collectibles to always go from the right side to the left side
     
-    # adding the random-yet-adequate y-axis position to the list of positions
-    y_pos_collects_1.append(y_collect)
+        while True:
 
-    # creating the objects of the class Collectible with the generated random positions
-    collectible = Collectible(x_collect, y_collect)
+            y_collect = randint(height // 2, height) - 30 # generating a random y-axis position for the collectible
 
-    # adding the newly-created collectible to the list with the other collectibles of the same kind
-    all_collects_1.append(collectible)
+            adequate = True 
+
+            if list_y:
+
+                for y in list_y:
+
+                    if abs(y_collect - y) < 50:
+
+                        adequate = False
+                        break
+
+            if adequate:
+                break
+
+        
+        # adding the random-yet-adequate y-axis position to the list of positions
+        list_y.append(y_collect)
+
+        # creating the objects of the class Collectible with the generated random positions
+        collectible = Collectible(x_collect, y_collect)
+
+        # adding the newly-created collectible to the list with the other collectibles of the same kind
+        list_all.append(collectible)
+
+    return list_all, list_y
+
+# creating lists to store the collectibles more easily
+
+all_collects_1, y_pos_collec_1 = creating_collectibles()
 
 # creating a clock
 
@@ -127,6 +134,7 @@ while True:
     # drawing the collectibles based on which of them were already collected or lost
 
     remaining_collect_1 = []
+    remaining_y_pos_1 = []
 
     for collectible in all_collects_1:
 
@@ -142,45 +150,14 @@ while True:
         if not collectible.collected and not collectible.lost:
 
             remaining_collect_1.append(collectible)
+            remaining_y_pos_1.append(collectible.y_pos)
 
     # recreating the list of all collectibles only with the ones actually available
     all_collects_1 = remaining_collect_1
+    y_pos_collec_1 = remaining_y_pos_1
 
-    if not all_collects_1: # let's go all over again!
+    if not all_collects_1 and not y_pos_collec_1: # let's go all over again!
 
-        y_pos_collects_1.clear()
-
-        # defining a random number of appearances for the collectibles
-        amount_collect = randint(1, 10)
-
-        while len(all_collects_1) < amount_collect:
-
-            x_collect = width # we want the collectibles to always go from the right side to the left side
-            
-            while True:
-                y_collect = randint(height // 2, height) - 30 # generating a random y-axis position for the collectible
-
-                adequate = True 
-
-                if y_pos_collects_1:
-
-                    for y in y_pos_collects_1:
-
-                        if abs(y_collect - y) < 50:
-
-                            adequate = False
-                            break
-
-                if adequate:
-                    break
-
-            # adding the random-yet-adequate y-axis position to the list of positions
-            y_pos_collects_1.append(y_collect)
-
-            # creating the objects of the class Collectible with the generated random positions
-            collectible = Collectible(x_collect, y_collect)
-
-            # adding the newly-created collectible to the list with the other collectibles of the same kind
-            all_collects_1.append(collectible)
+        all_collects_1, y_pos_collec_1 = creating_collectibles()
 
     pygame.display.flip()
